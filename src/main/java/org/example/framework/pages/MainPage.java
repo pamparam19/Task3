@@ -1,5 +1,6 @@
 package org.example.framework.pages;
 
+import io.qameta.allure.Step;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -20,14 +21,15 @@ public class MainPage extends BasePage{
     @FindBy(xpath = "//ul[@class='dropdown-menu menu_level_1']/li[contains(@class,'single') or @class='dropdown']/a/span")
     private List<WebElement> listSubMenu;
 
-
-    public MainPage checkOpenMainPage() {
+    @Step("Проверить появления заголовка {titleToBeChecked}")
+    public MainPage checkOpenMainPage(String titleToBeChecked) {
         waitUntilVisible(mpTitle);
         Assert.assertEquals("Заголовок отсутствует или не соответствует требуемому",
-                "Панель быстрого запуска", mpTitle.getText());
+                titleToBeChecked, mpTitle.getText());
         return this;
     }
 
+    @Step("Открыть меню {nameBaseMenu}")
     public MainPage selectBaseMenu(String nameBaseMenu) {
         for (WebElement menuItem : listBaseMenu) {
             if (menuItem.getText().equalsIgnoreCase(nameBaseMenu)) {
@@ -41,6 +43,7 @@ public class MainPage extends BasePage{
     }
 
 
+    @Step("Открыть подменю {nameSubMenu}")
     public BusinessTripPage selectSubMenu(String nameSubMenu) {
         for (WebElement menuItem : listSubMenu) {
             if (menuItem.getText().equalsIgnoreCase(nameSubMenu)) {

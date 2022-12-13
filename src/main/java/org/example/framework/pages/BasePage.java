@@ -16,7 +16,7 @@ public class BasePage {
     protected PageManager pageManager = PageManager.getPageManager();
     protected Actions action = new Actions(driverManager.getDriver());
     protected JavascriptExecutor js = (JavascriptExecutor) driverManager.getDriver();
-    protected WebDriverWait wait = new WebDriverWait(driverManager.getDriver(), 10, 1000);
+    protected WebDriverWait wait = new WebDriverWait(driverManager.getDriver(), 20, 10000);
     private final TestPropManager props = TestPropManager.getTestPropManager();
 
     public BasePage() {

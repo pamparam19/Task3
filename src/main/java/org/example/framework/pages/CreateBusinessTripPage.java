@@ -1,5 +1,6 @@
 package org.example.framework.pages;
 
+import io.qameta.allure.Step;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -66,14 +67,15 @@ public class CreateBusinessTripPage extends BasePage{
 
 
 
-
-    public CreateBusinessTripPage checkOpenCreateBusinessTripPage() {
+    @Step("Проверить появление заголовка {titleToBeChecked}")
+    public CreateBusinessTripPage checkOpenCreateBusinessTripPage(String titleToBeChecked) {
         waitUntilVisible(createBTTitle);
         Assert.assertEquals("Заголовок отсутствует или не соответствует требуемому",
-                "Создать командировку", createBTTitle.getText());
+                titleToBeChecked, createBTTitle.getText());
         return this;
     }
 
+    @Step("Выбрать подразделение {unitName} и проверить правильность заполнения поля")
     public CreateBusinessTripPage chooseUnit(String unitName){
         Select drpUnit = new Select(drpBusinessUnit);
         drpUnit.selectByVisibleText(unitName);
@@ -83,6 +85,7 @@ public class CreateBusinessTripPage extends BasePage{
         return this;
     }
 
+    @Step ("Выбрать организацию {orgName} и проверить правильность заполнения поля")
     public CreateBusinessTripPage chooseOrganisation(String orgName){
         waitUntilClickable(orgChooseFirst).click();
         waitUntilClickable(orgChooseSecond).click();
@@ -93,22 +96,27 @@ public class CreateBusinessTripPage extends BasePage{
         return this;
     }
 
+    @Step("Включить и проверить чекбокс Заказ билетов")
     public CreateBusinessTripPage turnOnCheckbox(){
         waitUntilClickable(ticketCheckbox).click();
         Assert.assertTrue("Чекбокс Заказ билетов не отмечен", ticketCheckbox.isSelected());
         return this;
     }
 
+    @Step("Заполнить поле город выбытия {depCity} и город прибытия {arrCity} " +
+            "и проверить правильность заполнения полей")
     public CreateBusinessTripPage fillInCities(String depCity, String arrCity){
         fillInputField(departCity,depCity);
         fillInputField(arrivalCity,arrCity);
         Assert.assertEquals("Город выбытия заполнен неверно", depCity,
                 departCity.getAttribute("value"));
-        Assert.assertEquals("Город выбытия заполнен неверно", arrCity,
+        Assert.assertEquals("Город прибытия заполнен неверно", arrCity,
                 arrivalCity.getAttribute("value"));
         return this;
     }
 
+    @Step("Заполнить дату выезда {departDate} и дату возвращения {retDate} " +
+            "и проверить правильность заполнения полей")
     public CreateBusinessTripPage fillInDates(String departDate, String retDate){
         depDate.sendKeys(departDate);
         checkDates(checkMonthYear, checkDay, departDate);
@@ -119,15 +127,17 @@ public class CreateBusinessTripPage extends BasePage{
         return this;
     }
 
-    public CreateBusinessTripPage checkMainAlert(){
+    @Step("Проверить сообщение об ошибке {alertText}")
+    public CreateBusinessTripPage checkMainAlert(String alertText){
         waitUntilClickable(saveCloseButton).click();
+        scrollToElementJs(alertMesUsers);
         waitUntilVisible(alertMesUsers);
         Assert.assertEquals("Сообщение об ошибке не появилось/некорректно",
-                "Список командируемых сотрудников не может быть пустым",
+                alertText,
                 alertMesUsers.getText());
         waitUntilVisible(alertMesForUs);
         Assert.assertEquals("Сообщение об ошибке не появилось/некорректно",
-                "Список командируемых сотрудников не может быть пустым",
+                alertText,
                 alertMesForUs.getText());
         return this;
     }
